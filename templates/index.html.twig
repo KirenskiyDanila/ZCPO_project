@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PH{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="position-relative overflow-hidden p-3 p-md-5 text-center bg-light">
+            <div class="row">
+                {% for photo in photos %}
+                        <div class="col-md-5 p-lg-2 mx-auto">
+                            <a href="{{ path('app_photo_show', {'id': photo.id}) }}">
+                                <img src="{{photo.path}}" height="250">
+                            </a>
+                            <p>{{ photo.name }}</p>
+                            <a href="{{ path('app_photo_edit', {'id': photo.id}) }}" class="link-secondary">Редактировать</a>
+                        </div>
+                {% else %}
+                    <p colspan="5">Нет записей</p>
+                {% endfor %}
+            </div> 
+        </div>
+        <a href="{{ path('app_photo_new') }}" class="text-center p-3 mx-auto link-secondary">Добавить новое фото</a>
+        {% if pages > 1 %}
+        <ul class="pagination pagination-sm">
+            {# `«` arrow  #}
+            {% if thisPage != 1 %}
+            <li>
+                <a href="{{ path('app_pages_index', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}" class="text-center p-3 mx-auto link-secondary">«</a>
+            </li>
+            {% endif %}
+
+            {# Render each page number #}
+            {% for i in pages %}
+            <li {{ thisPage == i ? 'class="active"' }}>
+            <a href="{{ path('app_pages_index', {page: i}) }}" class="text-center p-3 mx-auto link-secondary">{{ i }}</a>
+            </li>
+            {% endfor %}
+
+            {% if thisPage != pages|last and disableRightArrow == false %}
+            {# `»` arrow #}
+            <li>
+                <a href="{{ path('app_pages_index', {page: thisPage+1 <= pages ? thisPage+1 : thisPage}) }}" class="text-center p-3 mx-auto link-secondary">»</a>
+            </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>    
+
+{% endblock %}
